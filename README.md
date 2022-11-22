@@ -19,8 +19,17 @@
 
 01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
 
-## Estimates
-<!-- See below -->
+## Time Estimation
+
+Name of feature: Day 1 front end/back end can of books
+
+Estimate of time needed to complete: 4hours
+
+Start time: 1p
+
+Finish time: 5p
+
+Actual time needed to complete: 4, almost complete
 
 ## Credit and Collaborations
 
