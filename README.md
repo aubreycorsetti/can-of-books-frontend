@@ -33,6 +33,8 @@ Actual time needed to complete: 4, almost complete
 
 ## Credit and Collaborations
 
+Photo by Studio Media on Unsplash (books photo img)
+
 Partner: Brenda Jow
 
 ## Professional Pairing Practice/ Our Agreement
