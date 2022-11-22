@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React from 'react';
+import Carousel from 'react-bootstrap/Carousel';
+
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -28,21 +30,30 @@ class BestBooks extends React.Component {
 
 
   render() {
-
-    /* TODO: render all the books in a Carousel */
-    let books = this.state.books.map((book) => (
-      <p key={book._id}>{book.title}</p>
-    ));
-
+    console.log(this.state.books);
     return (
       <>
-        <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
         {this.state.books.length ? (
-          <p>{books}</p>
+          <Carousel>
+            {this.state.books.map((books) => (
+            <Carousel.Item key={books._id}>
+              <img
+                className="images"
+                src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9va3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=700&q=60"
+                alt={books.title}
+              />
+              <Carousel.Caption>
+                <h3>{books.title}</h3>
+                <h4>{books.author}</h4>
+                <p>{books.description}</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+            ))}
+          </Carousel>
         ) : (
-          <h3>No Books Found :(</h3>
+          <h3>No Books Found</h3>
         )}
+
       </>
     )
   }
