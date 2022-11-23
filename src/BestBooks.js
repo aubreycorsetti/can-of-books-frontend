@@ -2,8 +2,8 @@ import axios from 'axios';
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Button, Container, ListGroup } from 'react-bootstrap';
-import UpdateBookForm from './UpdateBook';
 import AddBooks from './AddBooks';
+import UpdateBook from './UpdateBook'
 
 
 
@@ -13,8 +13,8 @@ class BestBooks extends React.Component {
     this.state = {
       books: [],
       isModalShown: false,
-      showUpdateForm: false
-
+      showUpdateForm: false,
+      updateBook: null
     }
   }
 
@@ -102,7 +102,23 @@ class BestBooks extends React.Component {
     this.postBooks(newBook);
 
   }
+  //Update book 
+  showUpdateBookModal= ()=>{
+    this.setState({showUpdateForm:true})
+  }
+  handleUpdateBookSubmit = (event) => {
+    event.preventDefault();
+    let bookToUpdate = {
+      title: event.target.title.value || this.state.updateBook.title,
+      author: event.target.author.value || this.state.updateBook.author,
+      description: event.target.description.value || this.state.updateBook.description,
+      _id: this.state.updateBook._id,
+      __v:this.state.updateBook.__v
+    }
+    this.updatedBooks(bookToUpdate);
+    this.setState({showUpdateForm:false, updateBook: null})
 
+  }
 
   render() {
 
@@ -134,31 +150,42 @@ class BestBooks extends React.Component {
             onClick={this.handleShowModal}>Add Book
           </Button>
           <ListGroup>
-            {this.state.books.map((books) => (
-              <ListGroup.Item>
-                <h3>{books.title}</h3>
-                <h4>{books.author}</h4>
+            {this.state.books.map((book) => (
+              <ListGroup.Item key={book._id}>
+                <h3>{book.title}</h3>
+                <h4>{book.author}</h4>
+                <p>{book.description}</p>
                 <Button
-                  key={books._id}
+                  key={book._id}
                   variant="dark"
-                  onClick={() => this.deleteBooks(books._id)}>Delete
+                  onClick={() => this.deleteBooks(book._id)}>Delete
                 </Button>
                 <Button
                   variant="dark"
-                  onClick={() => this.setState({ showUpdateForm: true })}>Update Book
+                  onClick={() => this.setState({ showUpdateForm: true, updateBook: book })}> Update Book
                 </Button>
               </ListGroup.Item>
             ))}
           </ListGroup>
         </Container>
+
         {
           this.state.showUpdateForm &&
-          <UpdateBookForm 
-          books= {this.props.books} 
-          updatedBooks= {this.props.updatedBooks}
-          />
+          <UpdateBook 
+          show={this.state.showUpdateForm} 
+          hideModal={()=> this.setState({showUpdateForm:false})} 
+          updateBook={this.state.updateBook} 
+          handleUpdateBookSubmit={this.handleUpdateBookSubmit}
+        />
         }
-        <AddBooks show={this.state.isModalShown} hideModal={this.hideModal} bookSubmit={this.handleBookSubmit}/>
+
+        <AddBooks 
+          show={this.state.isModalShown} 
+          hideModal={this.hideModal} 
+          bookSubmit={this.handleBookSubmit}
+        />
+
+        
       </>
     )
   }
