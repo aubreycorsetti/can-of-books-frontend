@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import { Button, Container, ListGroup } from 'react-bootstrap';
+
 
 
 class BestBooks extends React.Component {
@@ -11,7 +13,6 @@ class BestBooks extends React.Component {
     }
   }
 
-  /* TODO: Make a GET request to your API to fetch all the books from the database  */
   getBooks = async () => {
     try {
       let results = await axios.get(`${process.env.REACT_APP_SERVER}/books`);
@@ -28,8 +29,28 @@ class BestBooks extends React.Component {
     this.getBooks()
   }
 
+  deleteBooks = async (id) => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/books/${id}`;
+      await axios.delete(url);
+      let updatedBooks = this.state.books.filter(book => book._id !== id);
+      this.setState({
+        books: updatedBooks
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+ 
 
   render() {
+    let book = this.state.books.map((book) => (
+      <BestBooks
+      book={book}
+      key={book._id}
+      deleteBook={this.state.deleteBook}
+      />
+    ));
     console.log(this.state.books);
     return (
       <>
@@ -53,10 +74,32 @@ class BestBooks extends React.Component {
         ) : (
           <h3>No Books Found</h3>
         )}
+        <Container>
+              <Button 
+              key={book._id}
+              variant="dark"
+              onClick={() => this.state.postBooks(this.state.books._id)}>Add Book
+              </Button>
+          <ListGroup>
+            {this.state.books.map((books) => (
+              <ListGroup.Item>
+              <h3>{books.title}</h3>
+              <h4>{books.author}</h4>
+              <Button 
+              key={book._id}
+              variant="dark"
+              onClick={() => this.state.deleteBook(this.state.books._id)}>Delete
+              </Button>
+            </ListGroup.Item> 
+            ))}
+          </ListGroup>
+        </Container>
+     
 
       </>
     )
   }
 }
+
 
 export default BestBooks;
