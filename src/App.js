@@ -4,7 +4,7 @@ import Footer from './Footer';
 import BestBooks from './BestBooks';
 import Profile from './About';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
+import './App.css';
 import {
   BrowserRouter as Router,
   Routes,

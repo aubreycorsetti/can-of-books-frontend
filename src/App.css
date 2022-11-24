@@ -6,8 +6,10 @@ body {
 }
 
 .carousel-item img {
-  width: auto;
-  width: 50%;
+  height: 550px;
+  width: 550px;
+  object-fit: fill;
+  border-radius: 50%;
   padding: 2rem;
   margin: auto;
   display: block;
@@ -18,3 +20,8 @@ body {
   width: flex;
   background-color: rgba(128, 128, 128, 0.425);
 }
+
+.nav-item{
+  margin: auto;
+}
+
