@@ -5,8 +5,6 @@ import { Button, Container, ListGroup } from 'react-bootstrap';
 import AddBooks from './AddBooks';
 import UpdateBook from './UpdateBook'
 
-
-
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
