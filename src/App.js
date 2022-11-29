@@ -6,10 +6,10 @@ import About from './About';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { withAuth0 } from '@auth0/auth0-react';
+import Profile from './Profile';
+import Welcome from './Welcome';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
-import Profile from './Profile';
-import Content from './Content';
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,28 +18,27 @@ import {
 
 class App extends React.Component {
   render() {
+
     return (
       <>
-      {this.props.auth0.isAuthenticated ? <LogoutButton/> : <LoginButton/>}
-
-      {this.props.auth0.isAuthenticated ? <Content/> : <h2>Please sign in!</h2>}
+      {this.props.auth0.isAuthenticated ? <LogoutButton /> : <LoginButton />}
         <Router>
           <Header />
           <Routes>
-            <Route 
+            <Route
               exact path="/"
-              element={<BestBooks />}
-              >
+              element={this.props.auth0.isAuthenticated ? <BestBooks /> : <Welcome/>}
+            >
             </Route>
-            <Route 
+            <Route
               exact path="/About"
               element={<About />}
-              >
+            >
             </Route>
-            <Route 
+            <Route
               exact path="/Profile"
               element={<Profile />}
-              >
+            >
             </Route>
           </Routes>
           <Footer />
