@@ -1,9 +1,11 @@
+import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Button, Container, ListGroup } from 'react-bootstrap';
 import AddBooks from './AddBooks';
-import UpdateBook from './UpdateBook'
+import UpdateBook from './UpdateBook';
+
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -17,14 +19,30 @@ class BestBooks extends React.Component {
   }
 
   getBooks = async () => {
-    try {
-      let results = await axios.get(`${process.env.REACT_APP_SERVER}/books`);
-      // console.log(results);
-      this.setState({
-        books: results.data
-      });
-    } catch (error) {
-      console.log(error);
+    if (this.props.auth0.isAuthenticated) {
+
+      const res = await this.props.auth0.getIdTokenClaims();
+
+      const jwt = res.__raw;
+      console.log(jwt);
+
+      let config = {
+        method: 'get',
+        baseURL: process.env.REACT_APP_SERVER_URL,
+        url: '/books',
+        headers: {
+          "Authorization": `Bearer ${jwt}`
+        }
+      }
+      try {
+        let results = await axios(config);
+        // console.log(results);
+        this.setState({
+          books: results.data
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -93,7 +111,7 @@ class BestBooks extends React.Component {
     let newBook = {
       title: event.target.title.value,
       author: event.target.author.value,
-      description: event.target.description.value 
+      description: event.target.description.value
     }
     console.log(newBook)
 
@@ -101,8 +119,8 @@ class BestBooks extends React.Component {
 
   }
   //Update book 
-  showUpdateBookModal= ()=>{
-    this.setState({showUpdateForm:true})
+  showUpdateBookModal = () => {
+    this.setState({ showUpdateForm: true })
   }
   handleUpdateBookSubmit = (event) => {
     event.preventDefault();
@@ -111,15 +129,15 @@ class BestBooks extends React.Component {
       author: event.target.author.value || this.state.updateBook.author,
       description: event.target.description.value || this.state.updateBook.description,
       _id: this.state.updateBook._id,
-      __v:this.state.updateBook.__v
+      __v: this.state.updateBook.__v
     }
     this.updatedBooks(bookToUpdate);
-    this.setState({showUpdateForm:false, updateBook: null})
+    this.setState({ showUpdateForm: false, updateBook: null })
 
   }
 
   render() {
-
+    // console.log(this.state.books);
     return (
       <>
         {this.state.books.length ? (
@@ -169,25 +187,25 @@ class BestBooks extends React.Component {
 
         {
           this.state.showUpdateForm &&
-          <UpdateBook 
-          show={this.state.showUpdateForm} 
-          hideModal={()=> this.setState({showUpdateForm:false})} 
-          updateBook={this.state.updateBook} 
-          handleUpdateBookSubmit={this.handleUpdateBookSubmit}
-        />
+          <UpdateBook
+            show={this.state.showUpdateForm}
+            hideModal={() => this.setState({ showUpdateForm: false })}
+            updateBook={this.state.updateBook}
+            handleUpdateBookSubmit={this.handleUpdateBookSubmit}
+          />
         }
 
-        <AddBooks 
-          show={this.state.isModalShown} 
-          hideModal={this.hideModal} 
+        <AddBooks
+          show={this.state.isModalShown}
+          hideModal={this.hideModal}
           bookSubmit={this.handleBookSubmit}
         />
 
-        
+
       </>
     )
   }
 }
 
 
-export default BestBooks;
+export default withAuth0(BestBooks);
